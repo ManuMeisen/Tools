@@ -19,4 +19,7 @@ open_ports=$(grep -oP '\d+(?=/open)' initial_scan.txt | tr '\n' ',' | sed 's/,$/
 
 # Escaneo específico de los puertos abiertos encontrados
 echo "Realizando el escaneo específico de los puertos abiertos..."
-sudo nmap -sCV -Pn -p $open_ports -T4 -n $ip -oN target
+sudo nmap -sC -sV -Pn -p $open_ports -T4 -n $ip -oN target
+
+# Eliminar el archivo initial_scan.txt
+rm initial_scan.txt
