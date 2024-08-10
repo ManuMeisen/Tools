@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Define el puerto por defecto
+DEFAULT_PORT=8000
+
+# Verifica si se proporcionó un argumento
+if [ "$#" -eq 1 ]; then
+    PORT=$1
+else
+    PORT=$DEFAULT_PORT
+fi
+
+# Obtiene la IP local
+IP_LOCAL=$(hostname -I | awk '{print $1}')
+
+# Muestra las instrucciones de descarga
+echo -e "\nServidor HTTP ejecutándose en: http://$IP_LOCAL:$PORT/"
+echo -e "\nPuedes descargar archivos usando los siguientes comandos:\n"
+
+echo -e "Linux/MacOS (wget):\n"
+echo -e "\twget http://$IP_LOCAL:$PORT/archivo.txt\n"
+
+echo -e "Linux/MacOS (curl):\n"
+echo -e "\tcurl -O http://$IP_LOCAL:$PORT/archivo.txt\n"
+
+echo -e "Windows (CMD):\n"
+echo -e "\tpowershell -Command \"Invoke-WebRequest -Uri http://$IP_LOCAL:$PORT/archivo.txt -OutFile archivo.txt\"\n"
+
+echo -e "Windows (PowerShell):\n"
+echo -e "\tInvoke-WebRequest -Uri http://$IP_LOCAL:$PORT/archivo.txt -OutFile archivo.txt\n"
+
+# Ejecuta el servidor HTTP
+sudo python3 -m http.server "$PORT"
