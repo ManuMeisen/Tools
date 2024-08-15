@@ -1,25 +1,13 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
-    echo "Uso: $0 <dirección_IP>"
-    exit 1
+# Verificar que se haya proporcionado un argumento
+if [ "$#" -ne 1 ]; then
+  echo "Uso: $0 <dirección IP>"
+  exit 1
 fi
 
-ip=$1
+# Obtener la dirección IP del argumento
+IP_ADDRESS=$1
 
-# Escaneo inicial para todos los puertos abiertos
-echo "Realizando el escaneo inicial para todos los puertos abiertos..."
-sudo nmap -p- --open --min-rate 5000 -T4 -v -n -oG initial_scan.txt $ip
-
-# Limpiar la pantalla
-clear
-
-# Extrayendo los puertos abiertos del resultado del escaneo inicial
-open_ports=$(grep -oP '\d+(?=/open)' initial_scan.txt | tr '\n' ',' | sed 's/,$//')
-
-# Escaneo específico de los puertos abiertos encontrados
-echo "Realizando el escaneo específico de los puertos abiertos..."
-sudo nmap -sC -sV -Pn -p $open_ports -T4 -n $ip -oN target
-
-# Eliminar el archivo initial_scan.txt
-rm initial_scan.txt
+# Ejecutar el comando rustscan con los parámetros proporcionados
+rustscan -a "$IP_ADDRESS" --ulimit 5000 -- -sCV -Pn -T4
